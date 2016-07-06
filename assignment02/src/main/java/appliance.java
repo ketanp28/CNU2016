@@ -20,6 +20,11 @@ public class appliance {
         return this.id;
     }
     
+    public boolean getStatus(){
+        return this.status;
+    }
+    
+    
     public boolean getAutoOff()
     {
         return this.autoOff;
