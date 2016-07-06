@@ -12,6 +12,11 @@ public class userTest {
             assert(app.getId()==2);
         }
         
-        
+    @Test
+        public void testValue(){
+            String fileName = "/projects/assignment02/src/main/resources/test1.txt";
+            usertest.simulate(fileName);
+            
+        }
     
 }
