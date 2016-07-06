@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>user.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">smarthome</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">user.java</span></div><h1>user.java</h1><pre class="source lang-java linenums">import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+<span class="fc" id="L6">public class user {</span>
+    
+    // maps for appliances
+<span class="fc" id="L9">    Map&lt;Integer, Boolean&gt; ac = new TreeMap&lt;Integer, Boolean&gt;();</span>
+<span class="fc" id="L10">    Map&lt;Integer, Boolean&gt; heater = new TreeMap&lt;Integer, Boolean&gt;();</span>
+<span class="fc" id="L11">    Map&lt;Integer, Boolean&gt; oven = new TreeMap&lt;Integer, Boolean&gt;();</span>
+    
+    public void simulate(String fileName){
+        
+<span class="fc" id="L15">        appliance air = new appliance();</span>
+<span class="fc" id="L16">        appliance heat = new appliance();</span>
+<span class="fc" id="L17">        appliance cooker = new appliance();</span>
+        
+<span class="fc" id="L19">        air.setId(1);</span>
+<span class="fc" id="L20">        heat.setId(2);</span>
+<span class="fc" id="L21">        cooker.setId(3);</span>
+        
+<span class="fc" id="L23">        heat.setAutoOff();</span>
+        
+        // read input
+<span class="fc" id="L26">        readInput(fileName);</span>
+
+<span class="fc" id="L28">		doJob(air,ac,air.getAutoOff());</span>
+<span class="fc" id="L29">		doJob(heat,heater,heat.getAutoOff());</span>
+<span class="fc" id="L30">		doJob(cooker,oven,cooker.getAutoOff());</span>
+		
+<span class="fc" id="L32">	}</span>
+        
+        public void readInput(String fileName){
+<span class="fc" id="L35">            BufferedReader br = null;</span>
+        
+            // Input fornat : APP_ID TIME COMMAND
+            try {
+                String line;
+<span class="fc" id="L40">                br = new BufferedReader(new FileReader(fileName));</span>
+    
+<span class="fc bfc" id="L42" title="All 2 branches covered.">                while ((line = br.readLine()) != null) {</span>
+<span class="fc" id="L43">                    String[] parts = line.split(&quot; &quot;);</span>
+<span class="fc" id="L44">                    Integer appliance_id = Integer.parseInt(parts[0]);</span>
+<span class="fc" id="L45">                    Integer time = Integer.parseInt(parts[1]);</span>
+<span class="fc" id="L46">                    String cmd = parts[2];</span>
+                    
+                    
+<span class="fc bfc" id="L49" title="All 2 branches covered.">                    if(appliance_id == 1){</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">                        if(cmd.equals(&quot;On&quot;)){</span>
+<span class="fc" id="L51">                            ac.put(time,true);</span>
+                        }
+                        else{
+<span class="fc" id="L54">                            ac.put(time,false);</span>
+                        }
+                    }
+<span class="fc bfc" id="L57" title="All 2 branches covered.">                    if(appliance_id == 2){</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">                        if(cmd.equals(&quot;On&quot;)){</span>
+<span class="fc" id="L59">                            heater.put(time,true);</span>
+                        }
+                        else{
+<span class="fc" id="L62">                            heater.put(time,false);</span>
+                        }
+                    }
+<span class="fc bfc" id="L65" title="All 2 branches covered.">                    if(appliance_id == 3){</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">                        if(cmd.equals(&quot;On&quot;)){</span>
+<span class="fc" id="L67">                            oven.put(time,true);</span>
+                        }
+                        else{
+<span class="fc" id="L70">                            oven.put(time,false);</span>
+                        }
+                    }
+    
+<span class="fc" id="L74">                }</span>
+<span class="fc" id="L75">            }catch (IOException e) {</span>
+<span class="fc" id="L76">    			e.printStackTrace();</span>
+    		} finally {
+<span class="nc" id="L78">    			try {</span>
+<span class="pc bpc" id="L79" title="4 of 6 branches missed.">    				if (br != null)br.close();</span>
+<span class="nc" id="L80">    			} catch (IOException ex) {</span>
+<span class="nc" id="L81">    				ex.printStackTrace();</span>
+<span class="pc" id="L82">    			}</span>
+<span class="nc" id="L83">    		}</span>
+<span class="fc" id="L84">        }</span>
+        
+		public static void doJob(appliance app, Map&lt;Integer, Boolean&gt; app_map, boolean autoOff){
+        
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        if(autoOff==true){</span>
+<span class="fc" id="L89">            Map&lt;Integer, Boolean&gt; temp = new TreeMap&lt;Integer, Boolean&gt;();</span>
+            
+<span class="fc bfc" id="L91" title="All 2 branches covered.">            for(Map.Entry&lt;Integer, Boolean&gt; entry : app_map.entrySet()) {</span>
+<span class="fc" id="L92">              Integer key = entry.getKey();</span>
+<span class="fc" id="L93">              Boolean value = entry.getValue();</span>
+<span class="fc" id="L94">              temp.put(key,value);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">              if(value == true){</span>
+<span class="fc" id="L96">                  temp.put(key+app.getTimer(),false);</span>
+              }
+<span class="fc" id="L98">          }</span>
+<span class="fc" id="L99">        app_map = temp;</span>
+
+        }
+        
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        for(Map.Entry&lt;Integer, Boolean&gt; entry : app_map.entrySet()) {</span>
+<span class="fc" id="L104">              Integer key = entry.getKey();</span>
+<span class="fc" id="L105">              Boolean value = entry.getValue();</span>
+            
+              //System.out.println(key + &quot; =&gt; &quot; + value);
+              
+              // doing job
+<span class="fc bfc" id="L110" title="All 2 branches covered.">              if(value == true){</span>
+<span class="fc" id="L111">                  app.switchOn(key,app_map);</span>
+              }
+              else{
+<span class="fc" id="L114">                  app.switchOff(key);</span>
+              }
+              
+<span class="fc" id="L117">        }</span>
+<span class="fc" id="L118">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>
