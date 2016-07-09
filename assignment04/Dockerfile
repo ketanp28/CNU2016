@@ -1,5 +1,6 @@
 FROM maven:3-jdk-8
 VOLUME /tmp
 ADD . /
-RUN mvn package 
-CMD java -jar target/assignment04-1.0-SNAPSHOT.jar
+RUN apt-get update && apt-get install -y python-pip && pip install awscli && mvn package
+CMD aws s3 cp $CONFIG_URL/application.properties application.properties && cat application.properties && java -jar target/assignment04-1.0-SNAPSHOT.jar
+

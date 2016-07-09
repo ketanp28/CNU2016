@@ -28,26 +28,26 @@ public class ProductController {
     ProductRepository repo;
 
     // GET
-    @RequestMapping(value = "/products", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/products", method = RequestMethod.GET)
     public List<Product> getProducts()
     {
         logger.debug("Get all objects");
 
         List<Product> prod_List;
 
-        prod_List = (List<Product>)(repo.findByActive(0));
+        prod_List = (List<Product>)(repo.findByActive(1));
 
         return prod_List;
     }
 
 
-    @RequestMapping(value = "/products/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/products/{id}", method = RequestMethod.GET)
     public ResponseEntity<Product> getProductById(@PathVariable Integer id)
     {
         logger.debug("get entry with id {} ",id );
 
         Product prod ;
-        prod = repo.findByIdAndActive(id,0);
+        prod = repo.findByIdAndActive(id,1);
 
         if(prod == null){
             return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
@@ -57,7 +57,7 @@ public class ProductController {
     }
 
 
-    @RequestMapping(value = "/products",method = RequestMethod.POST)
+    @RequestMapping(value = "/api/products",method = RequestMethod.POST)
     public ResponseEntity<Product> addProduct(@RequestBody Product p)
     {
         logger.debug("add entry with body {} ",p );
@@ -67,19 +67,19 @@ public class ProductController {
 
     }
 
-    @RequestMapping(value = "/products/{id}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/api/products/{id}",method = RequestMethod.DELETE)
     public ResponseEntity<Product> deleteProduct(@PathVariable int id)
     {
         logger.debug("delete entry with id {} ",id );
 
         Product prod;
 
-        prod = repo.findByIdAndActive(id,0);
+        prod = repo.findByIdAndActive(id,1);
         if(prod==null){
             return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
         }
         else{
-            prod.setActive(1);
+            prod.setActive(0);
         }
 
         repo.save(prod);
@@ -88,12 +88,12 @@ public class ProductController {
 
     }
 
-    @RequestMapping(value = "/products/{id}",method = RequestMethod.PATCH)
+    @RequestMapping(value = "/api/products/{id}",method = RequestMethod.PATCH)
     public ResponseEntity<Product> patchProduct(@PathVariable int id , @RequestBody Product p)
     {
         Product prod;
 
-        prod = repo.findByIdAndActive(id,0);
+        prod = repo.findByIdAndActive(id,1);
         if(prod==null){
             return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
         }
@@ -109,15 +109,15 @@ public class ProductController {
 
     }
 
-    @RequestMapping(value = "/products/{id}",method = RequestMethod.PUT)
+    @RequestMapping(value = "/api/products/{id}",method = RequestMethod.PUT)
     public ResponseEntity<Product> updateProduct(@PathVariable int id , @RequestBody Product p)
     {
 
         Product prod;
 
-        prod = repo.findByIdAndActive(id,0);
+        prod = repo.findByIdAndActive(id,1);
         if(prod==null){
-            prod = repo.findByCodeAndActive(p.getCode(),0);
+            prod = repo.findByCodeAndActive(p.getCode(),1);
             if(prod==null){
                 return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
             }
