@@ -129,7 +129,7 @@ public class ProductController {
         }
 
         repo.save(prod);
-        return ResponseEntity.status(HttpStatus.OK).body(prod);
+        return ResponseEntity.status(HttpStatus.CREATED).body(prod);
 
     }
 
