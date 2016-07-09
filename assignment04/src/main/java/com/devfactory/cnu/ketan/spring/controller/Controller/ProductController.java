@@ -68,7 +68,7 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/api/products/{id}",method = RequestMethod.DELETE)
-    public ResponseEntity<Product> deleteProduct(@PathVariable int id)
+    public ResponseEntity deleteProduct(@PathVariable int id)
     {
         logger.debug("delete entry with id {} ",id );
 
@@ -84,7 +84,7 @@ public class ProductController {
 
         repo.save(prod);
         logger.debug("updated enitity: {}", prod);
-        return new ResponseEntity<Product>(prod,HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(prod);
 
     }
 
