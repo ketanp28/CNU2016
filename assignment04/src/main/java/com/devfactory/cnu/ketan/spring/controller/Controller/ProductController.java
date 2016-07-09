@@ -108,7 +108,7 @@ public class ProductController {
 
         repo.save(prod);
         logger.debug("updated enitity: {}", prod);
-        return ResponseEntity.status(HttpStatus.CREATED).body(prod);
+        return ResponseEntity.status(HttpStatus.OK).body(prod);
 
     }
 
@@ -129,7 +129,7 @@ public class ProductController {
         }
 
         repo.save(prod);
-        return ResponseEntity.status(HttpStatus.CREATED).body(prod);
+        return ResponseEntity.status(HttpStatus.OK).body(prod);
 
     }
 
