@@ -89,8 +89,33 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/api/products/{id}",method = RequestMethod.PATCH)
-    public ResponseEntity<Product> patchProduct(@PathVariable int id , @RequestBody Product p)
+    public ResponseEntity patchProduct(@PathVariable int id , @RequestBody Product p)
     {
+        Product prod;
+
+        prod = repo.findByIdAndActive(id,1);
+        if(prod==null){
+            return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
+        }
+        else{
+            if(p.getCode()==null) {
+                prod.setCode(p.getCode());
+            }
+            if(p.getDescription()==null) {
+                prod.setDescription(p.getDescription());
+            }
+        }
+
+        repo.save(prod);
+        logger.debug("updated enitity: {}", prod);
+        return ResponseEntity.status(HttpStatus.CREATED).body(prod);
+
+    }
+
+    @RequestMapping(value = "/api/products/{id}",method = RequestMethod.PUT)
+    public ResponseEntity updateProduct(@PathVariable int id , @RequestBody Product p)
+    {
+
         Product prod;
 
         prod = repo.findByIdAndActive(id,1);
@@ -104,37 +129,7 @@ public class ProductController {
         }
 
         repo.save(prod);
-        logger.debug("updated enitity: {}", prod);
-        return new ResponseEntity<Product>(prod,HttpStatus.OK);
-
-    }
-
-    @RequestMapping(value = "/api/products/{id}",method = RequestMethod.PUT)
-    public ResponseEntity<Product> updateProduct(@PathVariable int id , @RequestBody Product p)
-    {
-
-        Product prod;
-
-        prod = repo.findByIdAndActive(id,1);
-        if(prod==null){
-            prod = repo.findByCodeAndActive(p.getCode(),1);
-            if(prod==null){
-                return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
-            }
-            else{
-                prod.setId(id);
-                prod.setCode(p.getCode());
-                prod.setDescription(p.getDescription());
-            }
-        }
-        else{
-            prod.setId(id);
-            prod.setCode(p.getCode());
-            prod.setDescription(p.getDescription());
-        }
-
-        repo.save(prod);
-        return new ResponseEntity<Product>(prod,HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.CREATED).body(prod);
 
     }
 
