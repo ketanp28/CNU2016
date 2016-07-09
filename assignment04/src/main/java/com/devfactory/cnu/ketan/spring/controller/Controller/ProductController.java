@@ -58,12 +58,12 @@ public class ProductController {
 
 
     @RequestMapping(value = "/api/products",method = RequestMethod.POST)
-    public ResponseEntity<Product> addProduct(@RequestBody Product p)
+    public ResponseEntity addProduct(@RequestBody Product p)
     {
         logger.debug("add entry with body {} ",p );
 
         repo.save(p);
-        return new ResponseEntity<Product>(p,HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.CREATED).body(p);
 
     }
 
