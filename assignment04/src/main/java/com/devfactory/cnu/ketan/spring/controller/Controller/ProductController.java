@@ -99,10 +99,10 @@ public class ProductController {
         }
         else{
             if(p.getCode()==null) {
-                prod.setCode(p.getCode());
+                p.setCode(prod.getCode());
             }
             if(p.getDescription()==null) {
-                prod.setDescription(p.getDescription());
+                p.setDescription(prod.getDescription());
             }
         }
 
@@ -129,7 +129,7 @@ public class ProductController {
         }
 
         repo.save(prod);
-        return ResponseEntity.status(HttpStatus.CREATED).body(prod);
+        return ResponseEntity.status(HttpStatus.OK).body(prod);
 
     }
 
