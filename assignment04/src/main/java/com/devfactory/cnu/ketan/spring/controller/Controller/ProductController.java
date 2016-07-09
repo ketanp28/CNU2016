@@ -42,7 +42,7 @@ public class ProductController {
 
 
     @RequestMapping(value = "/api/products/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Product> getProductById(@PathVariable Integer id)
+    public ResponseEntity getProductById(@PathVariable Integer id)
     {
         logger.debug("get entry with id {} ",id );
 
@@ -50,10 +50,10 @@ public class ProductController {
         prod = repo.findByIdAndActive(id,1);
 
         if(prod == null){
-            return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("not found");
         }
 
-        return new ResponseEntity<Product>(prod,HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(prod);
     }
 
 
