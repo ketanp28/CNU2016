@@ -61,7 +61,7 @@ public class ProductController {
     public ResponseEntity addProduct(@RequestBody Product p)
     {
         logger.debug("add entry with body {} ",p );
-
+        p.setActive(1);
         repo.save(p);
         return ResponseEntity.status(HttpStatus.CREATED).body(p);
 
