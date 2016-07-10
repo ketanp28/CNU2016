@@ -1,0 +1,20 @@
+--- query 1 -----
+Select orders.timestamp ,sum(orders.sellprice*orders.quantity)as sales 
+from orders group by date(orders.timestamp);
+
+---- query 2 ----
+select orders.timestamp , sum((orders.sellprice-product.cost)*orders.quantity) as profit
+from orders join orders_has_product on orders_has_product.orders_orderId=orders.orderId
+join product on orders_has_product.product_productId = product.productid
+group by orders.timestamp
+
+---- query 3 ----
+select User.userCode, sum(quantity)/count(*) as average
+from orders join User on orders.User_userId = User.userId
+group by User_userId
+order by User.userCode
+
+---- query 4 ----
+update product set active = 0
+where productcode = "S24_1628"
+
