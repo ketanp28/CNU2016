@@ -46,7 +46,7 @@ public class OrderController {
     @RequestMapping(value = "/api/orders/{id}",method = RequestMethod.GET)
     public ResponseEntity getOrderById(@PathVariable Integer id){
         Orders order ;
-        order = orderRepo.findOne(id);
+        order = orderRepo.findByIdAndActive(id,1);
         if(order == null){
             return new ResponseEntity<Orders>(HttpStatus.NOT_FOUND);
         }
@@ -79,6 +79,7 @@ public class OrderController {
         Timestamp timestamp = new Timestamp(date.getTime());
         orderBody.setTimestamp(timestamp);
         orderBody.setStatus("In Process");
+        orderBody.setActive(1);
 
         orderRepo.save(orderBody);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderBody);
