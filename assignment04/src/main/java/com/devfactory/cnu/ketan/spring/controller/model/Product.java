@@ -73,11 +73,11 @@ public class Product {
         return description;
     }
 
-    public int getInventry() {
+    public int getQty() {
         return qty;
     }
 
-    public void setInventry(int inventry) {
+    public void setQty(int inventry) {
         this.qty = inventry;
     }
 

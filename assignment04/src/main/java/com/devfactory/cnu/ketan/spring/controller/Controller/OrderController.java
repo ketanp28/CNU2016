@@ -1,6 +1,5 @@
 package com.devfactory.cnu.ketan.spring.controller.Controller;
 
-import com.devfactory.cnu.ketan.spring.controller.OrderData;
 import com.devfactory.cnu.ketan.spring.controller.model.Orders;
 import com.devfactory.cnu.ketan.spring.controller.model.Product;
 import com.devfactory.cnu.ketan.spring.controller.model.User;
@@ -12,11 +11,9 @@ import com.devfactory.cnu.ketan.spring.controller.model.repository.UserRepositor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Map;
 import java.sql.Timestamp;
@@ -126,8 +123,8 @@ public class OrderController {
 
         int quantityOrdered = orderBody.getQuantity();
 
-        if(quantityOrdered <= productOrdered.getInventry()){
-            productOrdered.setInventry(productOrdered.getInventry()-quantityOrdered);
+        if(quantityOrdered <= productOrdered.getQty()){
+            productOrdered.setQty(productOrdered.getQty()-quantityOrdered);
             orderBody.setStatus("checkout");
 
             productRepo.save(productOrdered);
