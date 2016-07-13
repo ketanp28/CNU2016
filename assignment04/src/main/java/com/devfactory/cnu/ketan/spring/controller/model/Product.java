@@ -26,19 +26,19 @@ public class Product {
     @Column(name="productdesc")
     private String description;
 
-    @Column(name="active", columnDefinition = "tinyint")
+    @Column(name="active")
     private int active;
 
     @Column(name="inventry")
     private int qty;
-    private float cost;
+    private Double cost;
     @Column(name="sellCurrent")
-    private float sell_current;
+    private Double sell_current;
 
 
     protected Product(){}
 
-    public Product(int id,String code,String description,int inventry,float sell_current){
+    public Product(int id,String code,String description,int inventry,Double sell_current){
         this.id =id;
         this.code = code;
         this.description=description;
@@ -83,19 +83,19 @@ public class Product {
         this.qty = inventry;
     }
 
-    public float getCost() {
+    public Double getCost() {
         return cost;
     }
 
-    public void setCost(float cost) {
+    public void setCost(Double cost) {
         this.cost = cost;
     }
 
-    public float getSell_current() {
+    public Double getSell_current() {
         return sell_current;
     }
 
-    public void setSell_current(float sellCurrent) {
+    public void setSell_current(Double sellCurrent) {
         this.sell_current = sellCurrent;
     }
 }

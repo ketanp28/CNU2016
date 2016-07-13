@@ -24,9 +24,9 @@ public class Orders {
 
     private java.sql.Timestamp timestamp;
     private String status;
-    private Float sellprice;
+    private Double sellprice;
     private int quantity;
-    @Column(name="active", columnDefinition = "tinyint")
+    @Column(name="active")
     private int active;
 
     @Column(name = "User_userId")
@@ -34,7 +34,7 @@ public class Orders {
 
     public Orders(){}
 
-    public Orders(int id, Timestamp timestamp, String status, Float sellprice, int quantity, int userId) {
+    public Orders(int id, Timestamp timestamp, String status, Double sellprice, int quantity, int userId) {
         this.id = id;
         this.timestamp = timestamp;
         this.status = status;
@@ -75,11 +75,11 @@ public class Orders {
         this.status = status;
     }
 
-    public Float getSellprice() {
+    public Double getSellprice() {
         return sellprice;
     }
 
-    public void setSellprice(Float sellprice) {
+    public void setSellprice(Double sellprice) {
         this.sellprice = sellprice;
     }
 
