@@ -74,6 +74,7 @@ public class OrderController {
             id = user.getId();
         }
         orderBody.setUserId(id);
+
         java.util.Date date= new java.util.Date();
         Timestamp timestamp = new Timestamp(date.getTime());
         orderBody.setTimestamp(timestamp);
@@ -83,6 +84,14 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderBody);
 
     }
+    /*
+    @RequestMapping(value = "/api/orders",method = RequestMethod.POST)
+    public ResponseEntity createOrder(@RequestBody Orders orderBody){
+
+        orderRepo.save(orderBody);
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderBody);
+
+    }*/
 
     // orderDetails is map of <productId,quantity>
     @RequestMapping(value = "/api/orders/{id}/orderLineItem",method = RequestMethod.POST)
