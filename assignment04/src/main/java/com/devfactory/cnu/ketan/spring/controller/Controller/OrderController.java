@@ -96,7 +96,7 @@ public class OrderController {
 
 
         orderBody.setQuantity(quantityOrdered);
-        orderBody.setSellprice(productOrdered.getSellCurrent());
+        orderBody.setSellprice(productOrdered.getSell_current());
         OrderDetails orderDetails = new OrderDetails(id,orderBody.getUserId(),productOrdered.getId());
 
         orderDetailsRepo.save(orderDetails);

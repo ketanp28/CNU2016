@@ -32,16 +32,18 @@ public class Product {
     @Column(name="inventry")
     private int qty;
     private float cost;
-    private float sellCurrent;
+    @Column(name="sellCurrent")
+    private float sell_current;
 
 
     protected Product(){}
 
-    public Product(int id,String code,String description,int inventry){
+    public Product(int id,String code,String description,int inventry,float sell_current){
         this.id =id;
         this.code = code;
         this.description=description;
         this.qty=inventry;
+        this.sell_current=sell_current;
     }
 
     public void setId(int id){
@@ -89,11 +91,11 @@ public class Product {
         this.cost = cost;
     }
 
-    public float getSellCurrent() {
-        return sellCurrent;
+    public float getSell_current() {
+        return sell_current;
     }
 
-    public void setSellCurrent(float sellCurrent) {
-        this.sellCurrent = sellCurrent;
+    public void setSell_current(float sellCurrent) {
+        this.sell_current = sellCurrent;
     }
 }
