@@ -29,7 +29,8 @@ public class Product {
     @Column(name="active", columnDefinition = "tinyint")
     private int active;
 
-    private int inventry;
+    @Column(name="inventry")
+    private int qty;
     private float cost;
     private float sellCurrent;
 
@@ -40,7 +41,7 @@ public class Product {
         this.id =id;
         this.code = code;
         this.description=description;
-        this.inventry=inventry;
+        this.qty=inventry;
     }
 
     public void setId(int id){
@@ -73,11 +74,11 @@ public class Product {
     }
 
     public int getInventry() {
-        return inventry;
+        return qty;
     }
 
     public void setInventry(int inventry) {
-        this.inventry = inventry;
+        this.qty = inventry;
     }
 
     public float getCost() {
