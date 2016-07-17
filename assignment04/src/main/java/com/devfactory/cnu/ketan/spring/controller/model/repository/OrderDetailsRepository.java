@@ -11,5 +11,5 @@ import java.util.List;
 @Component
 public interface OrderDetailsRepository extends CrudRepository<OrderDetails,Integer>{
     //List<OrderDetails> findByOrderIdAndUserId(int orderId,int userId);
-    OrderDetails findByOrderIdAndUserId(int orderId,int userId);
+    //OrderDetails findByOrderIdAndUserId(int orderId,int userId);
 }

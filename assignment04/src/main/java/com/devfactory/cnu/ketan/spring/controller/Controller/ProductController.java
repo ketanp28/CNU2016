@@ -76,7 +76,7 @@ public class ProductController {
             prod.setActive(0);
         }
         repo.save(prod);
-        logger.debug("updated enitity: {}", prod);
+        logger.debug("updated flaf of enitity: {}", prod);
         return ResponseEntity.status(HttpStatus.OK).body(prod);
 
     }

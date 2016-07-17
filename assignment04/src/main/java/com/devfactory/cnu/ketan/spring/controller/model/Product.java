@@ -13,37 +13,32 @@ import javax.persistence.Table;
  * Created by ketanpatil on 07/07/16.
  */
 @Entity
-@Table(name="product")
+@Table(name="PRODUCT")
 public class Product {
-    @Column(name="productid")
+    @Column(name="PRODUCT_ID")
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
 
-    @Column(name="productcode")
+    @Column(name="PRODUCT_CODE")
     private String code;
 
-    @Column(name="productdesc")
+    @Column(name="PRODUCT_DESCRIPTION")
     private String description;
 
-    @Column(name="active")
+    @Column(name="IS_AVAILABLE")
     private int active;
 
-    @Column(name="inventry")
-    private int qty;
+    @Column(name="QUANTITY_IN_STOCK")
+    private Integer qty;
+    @Column(name="COST_PRICE")
     private Double cost;
-    @Column(name="sellCurrent")
+    @Column(name="SELLING_PRICE")
     private Double sell_current;
 
 
-    protected Product(){}
-
-    public Product(int id,String code,String description,int inventry,Double sell_current){
-        this.id =id;
-        this.code = code;
-        this.description=description;
-        this.qty=inventry;
-        this.sell_current=sell_current;
+    protected Product(){
+        qty = 0;
     }
 
     public void setId(int id){
@@ -75,11 +70,11 @@ public class Product {
         return description;
     }
 
-    public int getQty() {
+    public Integer getQty() {
         return qty;
     }
 
-    public void setQty(int inventry) {
+    public void setQty(Integer inventry) {
         this.qty = inventry;
     }
 

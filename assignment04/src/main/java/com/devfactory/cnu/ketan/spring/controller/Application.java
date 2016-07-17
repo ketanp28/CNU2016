@@ -17,12 +17,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @SpringBootApplication
 public class Application extends WebMvcConfigurerAdapter {
 
-    @Autowired
-    private ExecuteTimeInterceptor requestInterceptor;
-
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(requestInterceptor);
-    }
+//    @Autowired
+//    private ExecuteTimeInterceptor requestInterceptor;
+//
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(requestInterceptor);
+//    }
 
 
     public static void main(String[] args) {

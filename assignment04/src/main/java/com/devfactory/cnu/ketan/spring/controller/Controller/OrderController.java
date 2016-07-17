@@ -14,9 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by ketanpatil on 09/07/16.
@@ -36,17 +38,19 @@ public class OrderController {
     @Autowired
     OrderDetailsRepository orderDetailsRepo;
 
-    @RequestMapping(value = "/api/order",method = RequestMethod.GET)
-    public ResponseEntity<List<Orders>> getOrders(){
-        List<Orders> order_List;
-        order_List = (List<Orders>)orderRepo.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(order_List);
-    }
+//    @RequestMapping(value = "/api/orders",method = RequestMethod.GET)
+//    public ResponseEntity<List<Orders>> getOrders(){
+//        List<Orders> order_List = new ArrayList<Orders>();
+//        for(Orders order : orderRepo.findAll()) {
+//            if(order.getActive()==0) order_List.add(order);
+//        }
+//        return ResponseEntity.status(HttpStatus.OK).body(order_List);
+//    }
 
     @RequestMapping(value = "/api/orders/{id}",method = RequestMethod.GET)
     public ResponseEntity getOrderById(@PathVariable Integer id){
         Orders order ;
-        order = orderRepo.findByIdAndActive(id,1);
+        order = orderRepo.findByIdAndActive(id,0);
         if(order == null){
             return new ResponseEntity<Orders>(HttpStatus.NOT_FOUND);
         }
@@ -54,60 +58,59 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/api/orders",method = RequestMethod.POST)
-    public ResponseEntity createOrder(@RequestBody Map<String,Object> body){
+    public ResponseEntity createOrder(){
         Orders orderBody = new Orders();
-        int id;
 
-        String userName = body.get("user_name").toString();
-        if(StringUtils.isEmpty(userName)){
-            // return bad request
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("body empty!");
-        }
-        User user = userRepo.findByName(userName);
-        if(user==null){
-            User newUser = new User();
-            newUser.setCode(userName);
-            userRepo.save(newUser);
-            id = newUser.getId();
-        }
-        else{
-            id = user.getId();
-        }
-        orderBody.setUserId(id);
-
-        java.util.Date date= new java.util.Date();
-        Timestamp timestamp = new Timestamp(date.getTime());
-        orderBody.setTimestamp(timestamp);
         orderBody.setStatus("In Process");
-        orderBody.setActive(1);
+        orderBody.setActive(0);
 
         orderRepo.save(orderBody);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderBody);
 
     }
-    /*
-    @RequestMapping(value = "/api/orders",method = RequestMethod.POST)
-    public ResponseEntity createOrder(@RequestBody Orders orderBody){
 
-        orderRepo.save(orderBody);
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderBody);
-
-    }*/
 
     // orderDetails is map of <productId,quantity>
     @RequestMapping(value = "/api/orders/{id}/orderLineItem",method = RequestMethod.POST)
     public ResponseEntity addProduct(@PathVariable Integer id,@RequestBody Map<String,Object> orderdata){
         Orders orderBody = orderRepo.findOne(id);
-        Product productOrdered = productRepo.findByIdAndActive((Integer)(orderdata.get("product_id")),1);
+
+        if(orderBody==null||orderBody.getActive()==1)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        if (orderdata.isEmpty() == true || orderdata.containsKey("qty") != true ||
+                orderdata.containsKey("product_id") != true ||
+                orderdata.get("qty") == null || orderdata.get("product_id") == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid data");
+        }
+
+        Integer pId = (Integer)(orderdata.get("product_id"));
+        Product productOrdered = productRepo.findByIdAndActive(pId,1);
         int quantityOrdered = (Integer)(orderdata.get("qty"));
 
-        if(orderBody==null || productOrdered==null)
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        try{
+        if(orderBody==null || productOrdered==null) {
 
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }}
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        if (orderBody.getStatus().equals("In Process") == false) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Closed order ");
+        }
 
-        orderBody.setQuantity(quantityOrdered);
-        orderBody.setSellprice(productOrdered.getSell_current());
-        OrderDetails orderDetails = new OrderDetails(id,orderBody.getUserId(),productOrdered.getId());
+        // check if order is already present then add quantity else create new order
+        for(OrderDetails orderD : orderDetailsRepo.findAll()) {
+            if (orderD.getOrderId() == id && orderD.getProductId() == pId) {
+                orderD.setQuantityOrdered(orderD.getQuantityOrdered() + (Integer) orderdata.get("qty"));
+                orderDetailsRepo.save(orderD);
+                return ResponseEntity.status(HttpStatus.CREATED).body(orderD);
+            }
+        }
+        OrderDetails orderDetails = new OrderDetails(
+                id, pId, (Integer) orderdata.get("qty"), productOrdered.getCost(),productOrdered.getSell_current()
+        );
 
         orderDetailsRepo.save(orderDetails);
         orderRepo.save(orderBody);
@@ -119,30 +122,55 @@ public class OrderController {
 
     //
     @RequestMapping(value = "/api/orders/{id}",method = RequestMethod.PATCH)
-    public ResponseEntity submitOrder(@PathVariable Integer id,@RequestBody Map<String,Object> body){
+    public ResponseEntity submitOrder(@PathVariable Integer id,@RequestBody Map<String,Object> reqBody){
+        System.out.print("reached");
         Orders orderBody = orderRepo.findOne(id);
         if(orderBody==null){
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        if(StringUtils.isEmpty(body.get("address").toString()))
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
 
-        OrderDetails orderDetails = orderDetailsRepo.findByOrderIdAndUserId(orderBody.getId(),orderBody.getUserId());
-        Product productOrdered = productRepo.findByIdAndActive(orderDetails.getProductId(),1);
-        User userBody = userRepo.findOne(orderBody.getUserId());
-
-        int quantityOrdered = orderBody.getQuantity();
-
-        if(quantityOrdered <= productOrdered.getQty()){
-            productOrdered.setQty(productOrdered.getQty()-quantityOrdered);
-            orderBody.setStatus("checkout");
-
-            productRepo.save(productOrdered);
-            orderRepo.save(orderBody);
-
-            return ResponseEntity.status(HttpStatus.OK).body(orderBody);
+        if (orderBody.getStatus().equals("In Process") == false) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Closed order ");
         }
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        if (reqBody == null || reqBody.get("address") == null || reqBody.get("user_name") == null || reqBody.get("status") == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(" details not specified");
+        }
+        System.out.print("reached2");
+        String username = (String) reqBody.get("user_name");
+        String address = (String) reqBody.get("address");
+        User userBody = userRepo.findByCode(username);
+        System.out.print("reached3");
+        // check if order is already present then add quantity else create new order
+        for(OrderDetails orderDetail : orderBody.orderDetails) {
+            Product product = productRepo.findOne(orderDetail.getProductId());
+            int remStock = product.getQty() - orderDetail.getQuantityOrdered();
+            if(remStock < 0){
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body("out of stock");
+            }
+        }
+        for(OrderDetails orderDetails : orderBody.orderDetails) {
+            Product product = productRepo.findOne(orderDetails.getProductId());
+            int remStock = product.getQty() - orderDetails.getQuantityOrdered();
+            product.setQty(remStock);
+            productRepo.save(product);
+            orderDetailsRepo.save(orderDetails);
+        }
+        System.out.print("reached4");
+        orderBody.setTimestamp(new Date());
+        orderBody.setStatus((String)reqBody.get("status"));
+        if (userBody == null) {
+            User newUser = new User(username,address);
+            userRepo.save(newUser);
+            orderBody.setUserDetails(newUser);
+        }
+        else{
+            userBody.setAddress(address);
+            userRepo.save(userBody);
+            orderBody.setUserDetails(userBody);
+        }
+        System.out.print("reached5");
+        orderRepo.save(orderBody);
+        return ResponseEntity.status(HttpStatus.OK).body(orderBody);
 
     }
 
@@ -151,7 +179,7 @@ public class OrderController {
         Orders orderBody = orderRepo.findOne(id);
 
         if(orderBody!=null){
-            orderBody.setActive(0);
+            orderBody.setActive(1);
             orderRepo.save(orderBody);
 
             return new ResponseEntity(HttpStatus.NO_CONTENT);
