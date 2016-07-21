@@ -116,23 +116,25 @@ public class OrderController {
         if(orderBody==null||orderBody.getActive()==1)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
 
-        if (orderBody.getStatus().equals("In Process") == false) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Closed order ");
-        }
-        if (reqBody == null || reqBody.get("address") == null || reqBody.get("user_name") == null || reqBody.get("status") == null) {
+//        if (orderBody.getStatus().equals("In Process") == false) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Closed order ");
+//        }
+        if (reqBody == null || reqBody.get("address") == null || reqBody.get("user_name") == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(" details not specified");
         }
-        System.out.print("reached2");
+
         String username = (String) reqBody.get("user_name");
         String address = (String) reqBody.get("address");
         User userBody = userRepo.findByCode(username);
-        System.out.print("reached3");
+
+        orderBody.setTimestamp(new Date());
+
         // check if order is already present then add quantity else create new order
         for(OrderDetails orderDetail : orderBody.orderDetails) {
             Product product = productRepo.findOne(orderDetail.getProductId());
             int remStock = product.getQty() - orderDetail.getQuantityOrdered();
             if(remStock < 0){
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body("out of stock");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("out of stock");
             }
         }
         for(OrderDetails orderDetails : orderBody.orderDetails) {
@@ -143,7 +145,7 @@ public class OrderController {
             orderDetailsRepo.save(orderDetails);
         }
         System.out.print("reached4");
-        orderBody.setTimestamp(new Date());
+
         orderBody.setStatus((String)reqBody.get("status"));
         if (userBody == null) {
             User newUser = new User(username,address);
