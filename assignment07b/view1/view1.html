@@ -1,0 +1,31 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group" ng-model="cat_id">
+                <a href="" class="list-group-item active">
+                    <h4 class="list-group-item-heading">Category</h4>
+                </a>
+                <a href="" class="list-group-item" ng-repeat="cat in category.data">
+                    <h4 class="list-group-item-heading" ng-click="setCategory(cat)">{{cat.category_name}}</h4>
+                    <p class="list-group-item-text"></p>
+                </a>
+            </div>
+        </div>
+            <div class="col-md-9">
+                  <div class="col-sm-6 col-md-4 foo" ng-repeat="prod in products.data | filter:catFilter">
+                      <div class="thumbnail">
+                      <img src="image/shirt{{prod.id%7}}.jpg" alt="product">
+                      <div class="caption">
+                        <h3>{{prod.code}}<a href="" class="btn btn-primary" style="float: right;" >${{prod.price}}</a></h3>
+                          <div>
+                                <p>Category : {{prod.category_name}}</p>
+                                <p><a href="#products/{{prod.id}}" class="btn btn-default" role="button" style="float: right;" >Details</a></p>
+                          </div>
+
+                          <ngcart-addtocart id="{{ prod.id }}" name="{{ prod.code }}" price="{{ prod.price }}" quantity="1" quantity-max="30" data="item">Add To Cart</ngcart-addtocart>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+    </div>
+</div>
