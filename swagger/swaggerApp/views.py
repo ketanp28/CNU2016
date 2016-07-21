@@ -108,6 +108,10 @@ class OrderDetailsViewSet(mixins.RetrieveModelMixin, mixins.CreateModelMixin,
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+def health(request):
+    data = {"health":"ok"}
+    return JsonResponse(data)
+
 
 
 
