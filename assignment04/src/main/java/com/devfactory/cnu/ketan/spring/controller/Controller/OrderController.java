@@ -162,17 +162,19 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/api/orders/{id}",method = RequestMethod.DELETE)
-    public ResponseEntity deleteOrder(@PathVariable Integer id){
+    public ResponseEntity<?> deleteOrder(@PathVariable Integer id){
         Orders orderBody = orderRepo.findOne(id);
 
-        if(orderBody!=null){
-            orderBody.setActive(1);
-            orderRepo.save(orderBody);
+        if(orderBody==null||orderBody.getActive()==1)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
 
-            return new ResponseEntity(HttpStatus.OK);
-        }
+        orderBody.setStatus("Deleted");
+        orderBody.setActive(1);
+        orderRepo.save(orderBody);
 
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
+        return new ResponseEntity(HttpStatus.OK);
+
+
     }
 
 
