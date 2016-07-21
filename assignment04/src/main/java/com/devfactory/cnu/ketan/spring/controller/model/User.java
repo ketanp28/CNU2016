@@ -26,6 +26,8 @@ public class User {
     @Column(name="ADDRESS_LINE")
     private String address;
 
+    public User(){}
+
     public User(String code, String address) {
         this.code = code;
         this.address = address;

@@ -15,9 +15,10 @@ public class Feedback {
 
     private String message;
 
+    public Feedback() {}
+
     public Feedback(String message) {
         this.message = message;
     }
 
-    public Feedback() {}
 }

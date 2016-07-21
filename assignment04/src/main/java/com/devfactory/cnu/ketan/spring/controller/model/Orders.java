@@ -40,7 +40,7 @@ public class Orders {
     @OneToMany(mappedBy = "orderId")
     public Set<OrderDetails> orderDetails = new HashSet<OrderDetails>();
 
-    public Orders(){}
+    public Orders(){this.active=0;}
 
     public Orders(int id, Date timestamp, String status) {
         this.id = id;

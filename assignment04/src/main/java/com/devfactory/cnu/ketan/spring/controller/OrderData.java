@@ -1,8 +1,6 @@
 package com.devfactory.cnu.ketan.spring.controller;
 
-/**
- * Created by ketanpatil on 12/07/16.
- */
+
 public class OrderData {
     private int prodId;
     private int quantity;

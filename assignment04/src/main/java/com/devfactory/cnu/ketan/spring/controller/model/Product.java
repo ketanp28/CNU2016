@@ -19,16 +19,12 @@ public class Product {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
-
     @Column(name="PRODUCT_CODE")
     private String code;
-
     @Column(name="PRODUCT_DESCRIPTION")
     private String description;
-
     @Column(name="IS_AVAILABLE")
     private int active;
-
     @Column(name="QUANTITY_IN_STOCK")
     private Integer qty;
     @Column(name="COST_PRICE")
@@ -37,7 +33,7 @@ public class Product {
     private Double sell_current;
 
 
-    protected Product(){
+    public Product(){
         qty = 0;
     }
 

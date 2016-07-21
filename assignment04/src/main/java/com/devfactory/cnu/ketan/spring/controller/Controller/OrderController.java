@@ -11,12 +11,8 @@ import com.devfactory.cnu.ketan.spring.controller.model.repository.UserRepositor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Date;
 
@@ -38,14 +34,6 @@ public class OrderController {
     @Autowired
     OrderDetailsRepository orderDetailsRepo;
 
-//    @RequestMapping(value = "/api/orders",method = RequestMethod.GET)
-//    public ResponseEntity<List<Orders>> getOrders(){
-//        List<Orders> order_List = new ArrayList<Orders>();
-//        for(Orders order : orderRepo.findAll()) {
-//            if(order.getActive()==0) order_List.add(order);
-//        }
-//        return ResponseEntity.status(HttpStatus.OK).body(order_List);
-//    }
 
     @RequestMapping(value = "/api/orders/{id}",method = RequestMethod.GET)
     public ResponseEntity getOrderById(@PathVariable Integer id){
@@ -125,9 +113,8 @@ public class OrderController {
     public ResponseEntity submitOrder(@PathVariable Integer id,@RequestBody Map<String,Object> reqBody){
         System.out.print("reached");
         Orders orderBody = orderRepo.findOne(id);
-        if(orderBody==null){
+        if(orderBody==null||orderBody.getActive()==1)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
 
         if (orderBody.getStatus().equals("In Process") == false) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Closed order ");
@@ -182,10 +169,12 @@ public class OrderController {
             orderBody.setActive(1);
             orderRepo.save(orderBody);
 
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity(HttpStatus.OK);
         }
 
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
+
+
 
 }

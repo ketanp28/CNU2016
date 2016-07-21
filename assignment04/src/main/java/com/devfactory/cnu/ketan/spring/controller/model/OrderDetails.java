@@ -1,7 +1,5 @@
 package com.devfactory.cnu.ketan.spring.controller.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
 
 /**
@@ -19,9 +17,9 @@ public class OrderDetails {
     private int orderId;
 
     @Column(name="PRODUCT_ID")
-    private int productId;
+    private Integer productId;
     @Column(name="QUANTITY_ORDERED")
-    public int quantityOrdered;
+    public Integer quantityOrdered;
     @Column(name="COST_PRICE")
     public Double costPrice;
     @Column(name="SELLING_PRICE")
@@ -45,11 +43,11 @@ public class OrderDetails {
         this.orderId = orderId;
     }
 
-    public int getProductId() {
+    public Integer getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(Integer productId) {
         this.productId = productId;
     }
 
@@ -61,11 +59,11 @@ public class OrderDetails {
         this.orderDetailId = orderDetailId;
     }
 
-    public int getQuantityOrdered() {
+    public Integer getQuantityOrdered() {
         return quantityOrdered;
     }
 
-    public void setQuantityOrdered(int quantityOrdered) {
+    public void setQuantityOrdered(Integer quantityOrdered) {
         this.quantityOrdered = quantityOrdered;
     }
 
