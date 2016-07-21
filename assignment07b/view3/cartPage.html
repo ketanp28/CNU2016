@@ -1,0 +1,16 @@
+<div class="padding" ng-controller="cartController">
+    <h2 style="text-align:center;">Your Order</h2>
+    <div >
+        <ngcart-cart ></ngcart-cart>
+    </div>
+    <div >
+        <ngcart-summary>Summary</ngcart-summary>
+    </div>
+</div>
+<div>
+    <div class="col-md-4"></div>
+    <div class="col-md-3">
+        <p><a href="#/submit" class="btn btn-default" ng-click="addToDB(ngCart)" ng-disabled="ngCart.isEmpty()" role="button" style="float: right;" >----Go For Payment----</a></p>
+    </div>
+    <div class="col-md-5"></div>
+</div>

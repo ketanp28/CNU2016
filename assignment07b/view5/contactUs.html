@@ -1,0 +1,69 @@
+<div class="container" ng-controller="feedbackController">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="text-center"><strong>Order summary</strong></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <td><strong>Item Name</strong></td>
+                                <td class="text-left"><strong>Item Price</strong></td>
+                                <td class="text-left"><strong>Item Quantity</strong></td>
+                                <td class="text-right"><strong>Total</strong></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr ng-repeat="product in products.getItems()">
+                                <td>{{product.getName()}}</td>
+                                <td>{{product.getPrice()}}</td>
+                                <td>{{product.getQuantity()}}</td>
+                                <td>{{product.getQuantity()*product.getPrice()}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="emptyrow"><i class="fa fa-barcode iconbig"></i></td>
+                                <td class="emptyrow"></td>
+                                <td class="emptyrow text-center"><strong>Total</strong></td>
+                                <td class="emptyrow text-right">${{products.totalCost()}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="padding">
+        <h1 style="text-align:center;">Submit Feedback</h1>
+    </div>
+    <div class="row">
+        <form role="form">
+            <div class="col-lg-6">
+                <div class="well well-sm"><strong><span class="glyphicon glyphicon-asterisk"></span>Required Field</strong></div>
+                <div class="form-group">
+                    <label for="InputMessage">Enter Message</label>
+                    <div class="input-group">
+                        <textarea name="InputMessage" id="InputMessage" class="form-control" rows="5" required></textarea>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <!--<input type="submit" name="submit" id="submit" value="Submit" class="btn btn-info pull-right">-->
+                <a href="#/" class="btn btn-default" ng-click="feedback()" role="button" style="float: right;" role="button">Submit</a>
+            </div>
+        </form>
+        <div class="col-lg-5 col-md-push-1">
+            <div class="col-md-12">
+                <div class="zoomin">
+                    <img src="image/thanku.png" alt="product">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
