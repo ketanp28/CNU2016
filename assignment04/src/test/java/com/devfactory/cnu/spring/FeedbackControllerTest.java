@@ -1,8 +1,7 @@
 package com.devfactory.cnu.spring;
-import com.devfactory.cnu.ketan.spring.controller.model.Feedback;
-import com.jayway.restassured.response.Response;
 
-import com.sun.org.apache.xerces.internal.impl.xs.identity.Selector;
+import org.springframework.http.HttpStatus;
+
 import org.junit.Test;
 
 import static com.jayway.restassured.RestAssured.given;
@@ -16,12 +15,21 @@ public class FeedbackControllerTest {
     @Test
     public void addFeedback(){
 
-        Feedback feedback1 = new Feedback("feedback info");
+        given().
+                contentType("application/json")
+                .body("")
+                .when()
+                .post(contactusURL)
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
 
-        Response responce = given().contentType("application/json").body(feedback1).
-                    when().post(contactusURL).
-                    then().statusCode(200).
-                    extract().response();
+        given().
+                contentType("application/json")
+                .body("good feedback")
+                .when()
+                .post(contactusURL)
+                .then()
+                .statusCode(HttpStatus.OK.value());
 
     }
 

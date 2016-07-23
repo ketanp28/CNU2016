@@ -4,6 +4,7 @@ import com.devfactory.cnu.ketan.spring.controller.Application;
 import com.devfactory.cnu.ketan.spring.controller.model.OrderDetails;
 import com.devfactory.cnu.ketan.spring.controller.model.Orders;
 import com.devfactory.cnu.ketan.spring.controller.model.Product;
+import com.devfactory.cnu.ketan.spring.controller.model.User;
 import com.devfactory.cnu.ketan.spring.controller.model.repository.OrderDetailsRepository;
 import com.devfactory.cnu.ketan.spring.controller.model.repository.OrderRepository;
 import com.devfactory.cnu.ketan.spring.controller.model.repository.ProductRepository;
@@ -25,7 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
 
 /**
  * Created by ketanpatil on 18/07/16.
@@ -48,6 +48,9 @@ public class OrderControllerTest {
     @Autowired
     UserRepository userRepo;
 
+    private User user;
+
+
     private Product product1,product2;
     private int pIdActive,pIdInactive;
 
@@ -58,6 +61,7 @@ public class OrderControllerTest {
 
     @Before
     public void setUp() {
+
         // active product
         product1 = new Product();
         product1.setCode("code1");
@@ -96,11 +100,6 @@ public class OrderControllerTest {
         order = orderRepo.save(order);
         oIdActive2 = order.getId();
 
-        order = new Orders();
-        order.setActive(0);
-        order.setStatus("Not In process");
-        order = orderRepo.save(order);
-        oIdActive2 = order.getId();
 
         order = new Orders();
         order.setActive(1);
@@ -117,7 +116,7 @@ public class OrderControllerTest {
         orderDetails2  = new OrderDetails();
         orderDetails2.setProductId(pIdActive);
         orderDetails2.setOrderId(oIdActive1);
-        orderDetails2.setQuantityOrdered(55);
+        orderDetails2.setQuantityOrdered(55765);
         orderDetailsRepo.save(orderDetails2);
 
         orderDetails3  = new OrderDetails();
@@ -338,7 +337,7 @@ public class OrderControllerTest {
     public void submitOrder()
     {
         Map<String, String> req = new HashMap<>();
-        req.put("user_name", "name1");
+        req.put("user_name", "Atelier graphique");
         req.put("address","address1");
         req.put("status","checkedIn");
 
@@ -349,6 +348,20 @@ public class OrderControllerTest {
                 patch(ordersIdURL,oIdActive).
                 then().
                 statusCode(HttpStatus.OK.value()).
+                extract().response();
+
+        Map<String, String> req2 = new HashMap<>();
+        req.put("user_name", "namey8");
+        req.put("address","address3");
+        req.put("status","checkedIn");
+
+        Response response2 = given().
+                contentType("application/json").
+                body(req).
+                when().
+                patch(ordersIdURL,oIdActive).
+                then().
+                statusCode(HttpStatus.BAD_REQUEST.value()).
                 extract().response();
 
     }
@@ -366,7 +379,7 @@ public class OrderControllerTest {
                 when().
                 patch(ordersIdURL,oIdInactive).
                 then().
-                statusCode(HttpStatus.BAD_REQUEST.value()).
+                statusCode(HttpStatus.NOT_FOUND.value()).
                 extract().response();
 
     }
@@ -375,7 +388,7 @@ public class OrderControllerTest {
     public void submitWithOutName()
     {
         Map<String, String> req = new HashMap<>();
-        req.put("user_name", "");
+
         req.put("address","address1");
 
         Response response = given().
@@ -394,7 +407,22 @@ public class OrderControllerTest {
     {
         Map<String, String> req = new HashMap<>();
         req.put("user_name", "name1");
-        req.put("address","");
+
+        Response response = given().
+                contentType("application/json").
+                body(req).
+                when().
+                patch(ordersIdURL,oIdActive).
+                then().
+                statusCode(HttpStatus.BAD_REQUEST.value()).
+                extract().response();
+
+    }
+
+    @Test
+    public void submitWithOutbody()
+    {
+        String req = "";
 
         Response response = given().
                 contentType("application/json").
@@ -451,15 +479,16 @@ public class OrderControllerTest {
                 when().
                 delete(ordersIdURL, oIdActive).
                 then().
-                statusCode(HttpStatus.NO_CONTENT.value()).
+                statusCode(HttpStatus.OK.value()).
                 extract().response();
 
         response = given().
                 contentType("application/json").
                 when().
-                delete(ordersIdURL, 88888888).
+                delete(ordersIdURL, 888888).
                 then().
                 statusCode(HttpStatus.NOT_FOUND.value()).
                 extract().response();
+
     }
 }
