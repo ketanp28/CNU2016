@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<MessageCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="messagecollection.xsd">
+
+	<Plugin>
+		<ShortDescription>DEMO FindBugs Plugin</ShortDescription>
+		<Details><![CDATA[<p>A plugin created for the second LJC Unconference.</p>]]></Details>
+	</Plugin>
+
+	<BugCode abbrev="DEMO">A bug found by the DEMO plugin.</BugCode>
+	
+	
+
+	<Detector class="org.soal.findbugs.tutorial.DemoDetector6">
+		<Details><![CDATA[<p>Example detector class 6.</p>]]></Details>
+	</Detector>
+	<Detector class="org.soal.findbugs.tutorial.DemoDetector7">
+		<Details><![CDATA[<p>Example detector class 7.</p>]]></Details>
+	</Detector>
+	<Detector class="org.soal.findbugs.tutorial.DemoDetector8">
+		<Details><![CDATA[<p>Example detector class 8.</p>]]></Details>
+	</Detector>
+
+
+
+	<BugPattern type="DEMO_BUG_6">
+		<ShortDescription>Example bug type 6.</ShortDescription>
+		<LongDescription>Found println function.</LongDescription>
+		<Details><![CDATA[<p>How to fix bug type 6...</p>]]></Details>
+	</BugPattern>
+
+	<BugPattern type="DEMO_BUG_7">
+		<ShortDescription>Example bug type 7.</ShortDescription>
+		<LongDescription>“Did you intend to use Thread.start() to create a new execution thread?</LongDescription>
+		<Details><![CDATA[<p>How to fix bug type 7...</p>]]></Details>
+	</BugPattern>
+
+	<BugPattern type="DEMO_BUG_8">
+		<ShortDescription>Example bug type 8.</ShortDescription>
+		<LongDescription>Did you intend to put run() method in new thread?</LongDescription>
+		<Details><![CDATA[<p>How to fix bug type 8...</p>]]></Details>
+	</BugPattern>
+	
+</MessageCollection>
