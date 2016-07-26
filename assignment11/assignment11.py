@@ -6,7 +6,7 @@ for method in db.ents("Methods"):
 	if('run'==method.name()):
 		runCalledbyList = method.refs('CallBy')
 			for classCalled in runCalledbyList:
-				defEnt = classCalled.ref("DefineIn").ent()
+				defEnt = classCalled.ent().ref("DefineIn").ent()
 				for item in runCalled.ent().refs('Java Extend Couple'):
 
 					if("Thread" in item.ent().name()):
