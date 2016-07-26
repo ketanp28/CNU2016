@@ -4,9 +4,9 @@ db = understand.open("/var/app/testdb/test_sonic.udb")
 
 for method in db.ents("Methods"):
 	if('run'==method.name()):
-		runEnt = method.ref("DefineIn").ent():
-		runCalledbyList = runEnt.refs('CallBy'):
+		runCalledbyList = method.refs('CallBy')
 			for classCalled in runCalledbyList:
+				defEnt = classCalled.ref("DefineIn").ent()
 				for item in runCalled.ent().refs('Java Extend Couple'):
 
 					if("Thread" in item.ent().name()):
