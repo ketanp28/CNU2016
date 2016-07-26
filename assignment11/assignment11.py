@@ -10,11 +10,11 @@ for method in db.ents("Methods"):
 				for item in runCalled.ent().refs('Java Extend Couple'):
 
 					if("Thread" in item.ent().name()):
-						print('Method: ', method.name(), 'is a thread in class ', runEnt.name(),
+						print('Method: ', method.name(), 'is a thread in class ', defEnt.name(),
 							'extended from ', item.file(),'Did you mean to call start() instead?')
 
 					if("Runnable" in item.ent().name()):
-						print('Method: ', method.name(), 'is a runnable in class ', runEnt.name(),
+						print('Method: ', method.name(), 'is a runnable in class ', defEnt.name(),
 							'extended from ', item.file(),'Did you mean to call start() instead?')
 
 
